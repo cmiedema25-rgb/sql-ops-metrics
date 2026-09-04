@@ -1,0 +1,79 @@
+{
+  "rows_loaded": 10,
+  "queries": [
+    "delayed_by_customer",
+    "lane_delay_rate",
+    "status_mix"
+  ],
+  "sql": {
+    "delayed_by_customer": "\n        SELECT customer,\n               COUNT(*) AS delayed_loads,\n               ROUND(AVG(delay_hours), 2) AS avg_delay_hours,\n               ROUND(SUM(revenue), 2) AS revenue_at_risk\n        FROM shipments\n        WHERE status = 'delayed'\n        GROUP BY customer\n        ORDER BY delayed_loads DESC, customer\n    ",
+    "lane_delay_rate": "\n        SELECT origin || '->' || destination AS lane,\n               COUNT(*) AS loads,\n               SUM(CASE WHEN status = 'delayed' THEN 1 ELSE 0 END) AS delayed,\n               ROUND(\n                 1.0 * SUM(CASE WHEN status = 'delayed' THEN 1 ELSE 0 END) / COUNT(*),\n                 4\n               ) AS delay_rate\n        FROM shipments\n        GROUP BY origin, destination\n        ORDER BY delay_rate DESC, lane\n    ",
+    "status_mix": "\n        SELECT status, COUNT(*) AS n, ROUND(SUM(revenue), 2) AS revenue\n        FROM shipments\n        GROUP BY status\n        ORDER BY n DESC\n    "
+  },
+  "results": {
+    "delayed_by_customer": [
+      {
+        "customer": "Northwind",
+        "delayed_loads": 3,
+        "avg_delay_hours": 4.0,
+        "revenue_at_risk": 6000.0
+      },
+      {
+        "customer": "Acme Corp",
+        "delayed_loads": 1,
+        "avg_delay_hours": 2.0,
+        "revenue_at_risk": 1600.0
+      },
+      {
+        "customer": "Cascadia",
+        "delayed_loads": 1,
+        "avg_delay_hours": 6.0,
+        "revenue_at_risk": 2400.0
+      },
+      {
+        "customer": "Contoso",
+        "delayed_loads": 1,
+        "avg_delay_hours": 8.0,
+        "revenue_at_risk": 2200.0
+      }
+    ],
+    "lane_delay_rate": [
+      {
+        "lane": "Austin->Seattle",
+        "loads": 3,
+        "delayed": 2,
+        "delay_rate": 0.6667
+      },
+      {
+        "lane": "Portland->Denver",
+        "loads": 3,
+        "delayed": 2,
+        "delay_rate": 0.6667
+      },
+      {
+        "lane": "Chicago->Dallas",
+        "loads": 4,
+        "delayed": 2,
+        "delay_rate": 0.5
+      }
+    ],
+    "status_mix": [
+      {
+        "status": "delayed",
+        "n": 6,
+        "revenue": 12200.0
+      },
+      {
+        "status": "on_time",
+        "n": 4,
+        "revenue": 7300.0
+      }
+    ]
+  },
+  "headline": {
+    "delayed_loads": 6,
+    "customers_with_delay": 4,
+    "lanes": 3
+  },
+  "passed": true
+}

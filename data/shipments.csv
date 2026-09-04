@@ -1,0 +1,11 @@
+load_id,customer,origin,destination,status,delay_hours,revenue
+LW-101,Cascadia,Chicago,Dallas,delayed,6,2400
+LW-102,Cascadia,Chicago,Dallas,on_time,0,2100
+LW-103,Northwind,Austin,Seattle,delayed,3,1800
+LW-104,Acme Corp,Portland,Denver,on_time,0,1500
+LW-105,Contoso,Austin,Seattle,delayed,8,2200
+LW-106,Northwind,Chicago,Dallas,delayed,4,1900
+LW-107,Acme Corp,Portland,Denver,delayed,2,1600
+LW-108,Cascadia,Austin,Seattle,on_time,0,2000
+LW-109,Contoso,Chicago,Dallas,on_time,0,1700
+LW-110,Northwind,Portland,Denver,delayed,5,2300
